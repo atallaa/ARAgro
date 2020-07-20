@@ -346,6 +346,7 @@ function initialize()
 	floorMaterial.opacity = 0.4;
 	let floorMesh = new THREE.Mesh( floorGeometry, floorMaterial );
 	floorMesh.rotation.x = -Math.PI/2;
+	floorMesh.position.y = -0.2;
 	floorMesh.receiveShadow = true;
 	lightGroup.add( floorMesh );
 
@@ -452,48 +453,53 @@ function growth() {
 
 // Function for the save button
 function save() {
-
-	//Save all the growing tree markers and theirs positions in an array.
-	var positionTable = [];
-    for(let i=0 ; i < markerOBJTreeTable.length; i++) {
-     	if(markerOBJTreeTable[i].visible) {
-      		var position = transformation(markerOBJTreeTable[i]).toArray();
-      		var marker = {marker: markerOBJTreeTable[i], position: position};
-      		positionTable.push(marker);
-      	}
-    }
-
-    //Save all the non-growing tree markers and theirs positions in an array.
-    for(let i=0 ; i < markerGLBTreeTable.length; i++) {
-     	if(markerGLBTreeTable[i].visible) {
-      		var position = transformation(markerGLBTreeTable[i]).toArray();
-      		var marker = {marker: markerGLBTreeTable[i], position: position};
-      		positionTable.push(marker);
-
-      	}
-    }
-
-    //Save all the crop markers and theirs positions in an array.
-    for(let i=0 ; i < markerCropTable.length; i++) {
-     	if(markerCropTable[i].visible) {
-      		var position = transformation(markerCropTable[i]).toArray();
-      		var marker = {marker: markerCropTable[i], position: position};
-      		positionTable.push(marker);
-
-      	}
-    }
-
-    if(markerSun.visible){
-	    var sunPosition = transformation(markerSun).toArray();
-	    var sunMarker = {marker: markerSun, position: sunPosition};
-	    positionTable.push(sunMarker);
-	    console.log(positionTable);
+	// First we check if the trihedral marker is there.
+	if(!markerTriedre.visible){
+		window.alert("Trihedral marker not visible.")
 	}
+	else {
+		//Save all the growing tree markers and theirs positions in an array.
+		var positionTable = [];
+	    for(let i=0 ; i < markerOBJTreeTable.length; i++) {
+	     	if(markerOBJTreeTable[i].visible) {
+	      		var position = transformation(markerOBJTreeTable[i]).toArray();
+	      		var marker = {marker: markerOBJTreeTable[i], position: position};
+	      		positionTable.push(marker);
+	      	}
+	    }
 
-    // Display every marker in an alert.
-    for(let i=0; i<positionTable.length; i++) {
-    	window.alert(positionTable[i].marker.name + " : [" + positionTable[i].position[0].toFixed(2) + "," + positionTable[i].position[1].toFixed(2) + "," + positionTable[i].position[2].toFixed(2) + "]");
-    }
+	    //Save all the non-growing tree markers and theirs positions in an array.
+	    for(let i=0 ; i < markerGLBTreeTable.length; i++) {
+	     	if(markerGLBTreeTable[i].visible) {
+	      		var position = transformation(markerGLBTreeTable[i]).toArray();
+	      		var marker = {marker: markerGLBTreeTable[i], position: position};
+	      		positionTable.push(marker);
+
+	      	}
+	    }
+
+	    //Save all the crop markers and theirs positions in an array.
+	    for(let i=0 ; i < markerCropTable.length; i++) {
+	     	if(markerCropTable[i].visible) {
+	      		var position = transformation(markerCropTable[i]).toArray();
+	      		var marker = {marker: markerCropTable[i], position: position};
+	      		positionTable.push(marker);
+
+	      	}
+	    }
+
+	    if(markerSun.visible){
+		    var sunPosition = transformation(markerSun).toArray();
+		    var sunMarker = {marker: markerSun, position: sunPosition};
+		    positionTable.push(sunMarker);
+		    console.log(positionTable);
+		}
+
+	    // Display every marker in an alert.
+	    for(let i=0; i<positionTable.length; i++) {
+	    	window.alert(positionTable[i].marker.name + " : [" + positionTable[i].position[0].toFixed(2) + "," + positionTable[i].position[1].toFixed(2) + "," + positionTable[i].position[2].toFixed(2) + "]");
+	    }
+	}
 }
 
 
