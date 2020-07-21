@@ -496,8 +496,46 @@ function save() {
 		}
 
 	    // Display every marker in an alert.
-	    for(let i=0; i<positionTable.length; i++) {
+	    /*for(let i=0; i<positionTable.length; i++) {
 	    	window.alert(positionTable[i].marker.name + " : [" + positionTable[i].position[0].toFixed(2) + "," + positionTable[i].position[1].toFixed(2) + "," + positionTable[i].position[2].toFixed(2) + "]");
+	    }*/
+
+	    // We create the text for the file 
+	    var fileText = [];
+	    var d = new Date(); 
+	    fileText.push("# Simeo EditoOpsExport: " + d.getDate()+"/"+d.getMonth()+"/"+d.getFullYear()+ " "+ d.getHours() +":"+d.getMinutes()+":"+d.getSeconds()+"\n\n");
+	    fileText.push("# [Optional] Terrain\n");
+	    fileText.push("# T xOrigin yOrigin zOrigin xSize ySize flat\n");
+	    fileText.push("T 0 0 0 120 120 flat\n\n");
+	    fileText.push("# Part 1: one line per plant in the scene\n");
+	    fileText.push("#sceneId	plantId	plantFileName	x	y	z	scale	inclinationAzimut	inclinationAngle	stemTwist\n\n");
+	    for(let i=0; i<positionTable.length; i++){
+	    	fileText.push("1	"+ (i+1) + "	"+ positionTable[i].marker.name + "	" + Math.trunc(positionTable[i].position[0]) + "	" + Math.trunc(positionTable[i].position[1]) + "	" + Math.trunc(positionTable[i].position[2]) + "	1	0	0	0\n");
+	    }
+	    fileText.push("\n# [Optional] Part 2, chaining: only if scenario or project, one line per sceneId in part1\n");
+	    fileText.push("#motherId	sceneId	date\n");
+	    fileText.push("-1	1	0\n\n");
+	    fileText.push("# [Optional] Lines\n");
+	    fileText.push("# r,g,b color is optional, BLACK if missing\n");
+	    fileText.push("# Lines starting with a L are opened polylines\n");
+	    fileText.push("# Lines starting with a P are closed polygons\n");
+	    fileText.push("#sceneId	P/L[:r,g,b]	x,y,x,y...");
+
+	    //Create the Blob to make the fileText 
+	  	var file = new Blob(fileText, {type : 'ops/html'});
+	    if (window.navigator.msSaveOrOpenBlob) // IE10+
+	        window.navigator.msSaveOrOpenBlob(file, "scene.ops");
+	    else { // Others
+	        var a = document.createElement("a"),
+	                url = URL.createObjectURL(file);
+	        a.href = url;
+	        a.download = "scene.ops";
+	        document.body.appendChild(a);
+	        a.click();
+	        setTimeout(function() {
+	            document.body.removeChild(a);
+	            window.URL.revokeObjectURL(url);  
+	        }, 0); 
 	    }
 	}
 }
